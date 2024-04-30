@@ -1,0 +1,92 @@
+﻿@model Countries.Index.IndexModel
+@{
+    ViewBag.Title = "Countries";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Cities</h1>
+            <p>Here you can find all the cities in the database.</p>
+        </div>
+    </div>
+    @using (Html.BeginForm("Index", "Cities", FormMethod.Get))
+    {
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">🔍</div>
+                    </div>
+                    <input type="text" name="searchTerm" class="form-control" placeholder="Search" value="@Model.SearchTerm" />
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <select class="form-control" name="selectedCountryId">
+                    <option value="">All Countries</option>
+                    @foreach (var country in Model.Countries)
+                    {
+                        if (Model.SelectedCountryId == country.ID)
+                        {
+                            <option value="@country.ID" selected>@country.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@country.ID">@country.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" name="sortBy">
+                    @if (Model.SortBy == "default")
+                    {
+                        <option value="default" selected>Default</option>
+                    }
+                    else
+                    {
+                        <option value="default">Default</option>
+                    }
+
+                    @if (Model.SortBy == "population")
+                    {
+                        <option value="population" selected>Population</option>
+                    }
+                    else
+                    {
+                        <option value="population">Population</option>
+                    }
+
+                    @if (Model.SortBy == "area")
+                    {
+                        <option value="area" selected>Area</option>
+                    }
+                    else
+                    {
+                        <option value="area">Area</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+            </div>
+        </div>
+    }
+    
+    <div class="row">
+        @foreach (var city in Model.Cities)
+        {
+            <div class="col-md-4 col-sm-6 d-flex justify-content-center">
+                <div class="card my-2" style="width: 18rem;">
+                    <img class="card-img-top" src="~/img/@(city.Name).jpg" alt="Card image cap" style="max-height: 144.68px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@city.Name</h5>
+                        <p class="card-text">@city.Description</p>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Cities" asp-action="Details" asp-route-id="@city.ID">Explore</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
